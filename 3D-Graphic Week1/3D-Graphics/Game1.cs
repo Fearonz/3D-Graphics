@@ -18,9 +18,10 @@ namespace _3D_Graphics
         InputEngine input;
         DebugEngine debug;
         ImmediateShapeDrawer shapeDrawer;
-        List<SimpleModel> gameObjects = new List<SimpleModel>();
+        List<GameObject3D> gameObjects = new List<GameObject3D>();
         Camera mainCamera;
         OcclusionQuery occQuery;
+        QuadTree quadTree;
         Stopwatch timer = new Stopwatch();
         long totalTime = 0;
         int objectsDrawn;
@@ -57,6 +58,9 @@ namespace _3D_Graphics
 
             mainCamera = new Camera("cam", new Vector3(0, 5, 10), new Vector3(0, 0, -1));
             mainCamera.Initialize();
+
+            quadTree = new QuadTree(100, Vector2.Zero, 5);
+
             occQuery = new OcclusionQuery(GraphicsDevice);
             // TODO: Add your initialization logic here
 
@@ -66,7 +70,8 @@ namespace _3D_Graphics
         protected void AddModel(SimpleModel model)
         {
             model.Initialize();
-            gameObjects.Add(model);
+            //gameObjects.Add(model);
+            quadTree.AddObject(model);
         }
 
         /// <summary>
@@ -105,8 +110,12 @@ namespace _3D_Graphics
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+
             mainCamera.Update();
-            gameObjects.ForEach(go => go.Update());
+
+
+            quadTree.ProcessTree(mainCamera.Frustum, ref gameObjects);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -119,7 +128,7 @@ namespace _3D_Graphics
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            debug.Draw(mainCamera);
             foreach (SimpleModel go in gameObjects)
             {
                 if (FrustumContains(go))
