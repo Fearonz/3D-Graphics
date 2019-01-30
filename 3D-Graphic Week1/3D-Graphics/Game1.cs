@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Sample;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -22,10 +24,11 @@ namespace _3D_Graphics
         Camera mainCamera;
         OcclusionQuery occQuery;
         QuadTree quadTree;
+        OctTree octTree;
         Stopwatch timer = new Stopwatch();
         long totalTime = 0;
         int objectsDrawn;
-
+        Random ran = new Random();
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -59,19 +62,24 @@ namespace _3D_Graphics
             mainCamera = new Camera("cam", new Vector3(0, 5, 10), new Vector3(0, 0, -1));
             mainCamera.Initialize();
 
-            quadTree = new QuadTree(100, Vector2.Zero, 5);
-
+            //quadTree = new QuadTree(100, Vector2.Zero, 5);
+            octTree = new OctTree(100, Vector3.Zero,  5);
             occQuery = new OcclusionQuery(GraphicsDevice);
             // TODO: Add your initialization logic here
 
             base.Initialize();
         }
 
+        int toalObjects = 0;
         protected void AddModel(SimpleModel model)
         {
             model.Initialize();
+            model.LoadContent();
             //gameObjects.Add(model);
-            quadTree.AddObject(model);
+            //quadTree.AddObject(model);
+            octTree.AddObject(model);
+            toalObjects++;
+           
         }
 
         /// <summary>
@@ -84,10 +92,14 @@ namespace _3D_Graphics
             spriteBatch = new SpriteBatch(GraphicsDevice);
             sfont = Content.Load<SpriteFont>("debug");
 
-            gameObjects.Add(new SimpleModel("wall0", "wall", new Vector3(0, 0, -10)));
-            gameObjects.Add(new SimpleModel("ball0", "ball", new Vector3(0, 2.5f, -15)));
-            // TODO: use this.Content to load your game content here
-            gameObjects.ForEach(go => go.LoadContent());
+            for (int i = 0; i < 1000; i++)
+            {
+                float x = ran.Next(-50, 50);
+                float y = ran.Next(-50, 50);
+                float z = ran.Next(-50, 50);
+
+                AddModel(new SimpleModel("", "ball", new Vector3(x, y, z)));
+            }
         }
 
         /// <summary>
@@ -114,8 +126,9 @@ namespace _3D_Graphics
 
             mainCamera.Update();
 
-
-            quadTree.ProcessTree(mainCamera.Frustum, ref gameObjects);
+            gameObjects.Clear();
+           //quadTree.Process(mainCamera.Frustum, ref gameObjects);
+            octTree.Process(mainCamera.Frustum, ref gameObjects);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -141,8 +154,11 @@ namespace _3D_Graphics
                    
                 }
             }
+
+           
+
             spriteBatch.Begin();
-            spriteBatch.DrawString(sfont, "Objects Drawn:" + objectsDrawn, new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(sfont, "Objects Drawn:" + gameObjects.Count, new Vector2(10, 10), Color.White);
             spriteBatch.DrawString(sfont, "Occlusion Time Drawn:" + totalTime, new Vector2(10, 40), Color.White);
             spriteBatch.End();
             objectsDrawn = 0;
