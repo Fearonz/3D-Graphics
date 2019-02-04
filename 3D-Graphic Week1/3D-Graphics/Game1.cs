@@ -29,6 +29,9 @@ namespace _3D_Graphics
         long totalTime = 0;
         int objectsDrawn;
         Random ran = new Random();
+
+        Effect colorEffect;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -75,8 +78,18 @@ namespace _3D_Graphics
         {
             model.Initialize();
             model.LoadContent();
+
             //gameObjects.Add(model);
             //quadTree.AddObject(model);
+
+            foreach (ModelMesh mesh in model.Model.Meshes)
+            {
+                foreach ( ModelMeshPart part in mesh.MeshParts)
+                {
+                    part.Effect = colorEffect;
+                }
+            }
+
             octTree.AddObject(model);
             toalObjects++;
            
@@ -91,6 +104,7 @@ namespace _3D_Graphics
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             sfont = Content.Load<SpriteFont>("debug");
+            colorEffect = Content.Load<Effect>("Effects/EmptyEffect");
 
             for (int i = 0; i < 1000; i++)
             {
@@ -98,8 +112,10 @@ namespace _3D_Graphics
                 float y = ran.Next(-50, 50);
                 float z = ran.Next(-50, 50);
 
-                AddModel(new SimpleModel("", "ball", new Vector3(x, y, z)));
+                AddModel(new ColorModel("ball", new Vector3(x, y, z)));
             }
+
+
         }
 
         /// <summary>
@@ -138,20 +154,19 @@ namespace _3D_Graphics
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
+
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            debug.Draw(mainCamera);
+            GraphicsDevice.Clear(Color.PeachPuff);
+
             foreach (SimpleModel go in gameObjects)
             {
                 if (FrustumContains(go))
                 {
-                    if (!IsOccluded(go))
-                    {
-                        go.Draw(mainCamera);
-                        objectsDrawn++;
-                    }
-                   
+
+                    go.Draw(mainCamera);
+
+
                 }
             }
 

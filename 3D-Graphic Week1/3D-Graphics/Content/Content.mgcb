@@ -106,3 +106,9 @@
 /processorParam:TextureFormat=Compressed
 /build:debug.spritefont
 
+#begin effects/EmptyEffect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:effects/EmptyEffect.fx
+

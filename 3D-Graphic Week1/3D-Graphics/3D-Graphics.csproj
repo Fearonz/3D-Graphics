@@ -41,6 +41,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ColorModel.cs" />
+    <Compile Include="CustomEffectModel.cs" />
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\DebugEngine.cs" />
     <Compile Include="Engine\GameObject3D.cs" />
@@ -50,6 +52,7 @@
     <Compile Include="Engine\ModelDataExtractor.cs" />
     <Compile Include="Engine\SimpleModel.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Material.cs" />
     <Compile Include="OctTree.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
