@@ -62,7 +62,7 @@ namespace _3D_Graphics
             debug.Initialize();
             shapeDrawer.Initialize();
 
-            mainCamera = new Camera("cam", new Vector3(0, 5, 10), new Vector3(0, 0, -1));
+            mainCamera = new Camera("cam", new Vector3(0, 5, 20), new Vector3(0, 0, -1));
             mainCamera.Initialize();
 
             //quadTree = new QuadTree(100, Vector2.Zero, 5);
@@ -82,13 +82,6 @@ namespace _3D_Graphics
             //gameObjects.Add(model);
             //quadTree.AddObject(model);
 
-            foreach (ModelMesh mesh in model.Model.Meshes)
-            {
-                foreach ( ModelMeshPart part in mesh.MeshParts)
-                {
-                    part.Effect = colorEffect;
-                }
-            }
 
             octTree.AddObject(model);
             toalObjects++;
@@ -104,16 +97,16 @@ namespace _3D_Graphics
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             sfont = Content.Load<SpriteFont>("debug");
-            colorEffect = Content.Load<Effect>("Effects/EmptyEffect");
+ 
 
-            for (int i = 0; i < 1000; i++)
-            {
-                float x = ran.Next(-50, 50);
-                float y = ran.Next(-50, 50);
-                float z = ran.Next(-50, 50);
+            //for (int i = 0; i < 1000; i++)
+            //{
+            //    float x = ran.Next(-50, 50);
+            //    float y = ran.Next(-50, 50);
+            //    float z = ran.Next(-50, 50);
 
-                AddModel(new ColorModel("ball", new Vector3(x, y, z)));
-            }
+                AddModel(new DirectionalModel("house", new Vector3(0, 0, 0)));
+          //  }
 
 
         }
