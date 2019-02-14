@@ -105,7 +105,7 @@ namespace _3D_Graphics
             //    float y = ran.Next(-50, 50);
             //    float z = ran.Next(-50, 50);
 
-                AddModel(new DirectionalModel("house", new Vector3(0, 0, 0)));
+                AddModel(new PointLightModel("house", new Vector3(0, 0, 0)));
           //  }
 
 

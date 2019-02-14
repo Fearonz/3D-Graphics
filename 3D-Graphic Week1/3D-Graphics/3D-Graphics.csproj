@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ColorModel.cs" />
     <Compile Include="CustomEffectModel.cs" />
+    <Compile Include="PointLightModel.cs" />
     <Compile Include="DirectionalModel.cs" />
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\DebugEngine.cs" />

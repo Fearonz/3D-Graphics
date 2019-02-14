@@ -58,16 +58,19 @@ namespace _3D_Graphics
         public Color AmbientColor { get; set; }
         public Color DiffuseColor { get; set; } 
         public Vector3 Direction { get; set; }
+        public Vector3 Position { get; set; }
 
         public Texture2D Texture { get; set; }
+        public float Attenuation { get; set; }
 
 
         public DirectionalLightMaterial()
         {
             LightColor = Color.White;
             DiffuseColor = Color.White;
-            AmbientColor = new Color(0.15f,0.15f,0.15f);
-            Direction = new Vector3(0, 1, 0);
+            AmbientColor = Color.Black;
+            Position = new Vector3(0, 5, 0);
+            Attenuation = 60;
         }
 
         public override void SetEffectParameters(Effect effect)
@@ -75,8 +78,9 @@ namespace _3D_Graphics
             effect.Parameters["LightColor"].SetValue(LightColor.ToVector3());
             effect.Parameters["AmbientColor"].SetValue(AmbientColor.ToVector3());
             effect.Parameters["DiffuseColor"].SetValue(DiffuseColor.ToVector3());
-            effect.Parameters["Direction"].SetValue(Direction);
+            effect.Parameters["Position"].SetValue(Position);
             effect.Parameters["ModelTexture"].SetValue(Texture);
+            effect.Parameters["Attenuation"].SetValue(Attenuation);
 
             base.SetEffectParameters(effect);
         }
