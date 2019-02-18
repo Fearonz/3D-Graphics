@@ -61,6 +61,7 @@ namespace _3D_Graphics
         public Vector3 Position { get; set; }
 
         public Texture2D Texture { get; set; }
+        public Texture2D NoramlTexture { get; set; }
         public float Attenuation { get; set; }
 
 
@@ -81,6 +82,8 @@ namespace _3D_Graphics
             effect.Parameters["Position"].SetValue(Position);
             effect.Parameters["ModelTexture"].SetValue(Texture);
             effect.Parameters["Attenuation"].SetValue(Attenuation);
+            effect.Parameters["NormalTexture"].SetValue(NoramlTexture);
+
 
             base.SetEffectParameters(effect);
         }

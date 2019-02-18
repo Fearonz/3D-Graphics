@@ -17,11 +17,11 @@ namespace _3D_Graphics
 
         public override void LoadContent()
         {
-            CustomEffect = GameUtilities.Content.Load<Effect>("effects/PointLight");
+            CustomEffect = GameUtilities.Content.Load<Effect>("effects/NormalPointLight");
 
-            Texture2D tex = GameUtilities.Content.Load<Texture2D>("Textures/act2");
-            //Texture2D overlay = GameUtilities.Content.Load<Texture2D>("Textures/furtext");
-            Material = new DirectionalLightMaterial() { Texture = tex};
+            Texture2D tex = GameUtilities.Content.Load<Texture2D>("Textures/woodtexture");
+            Texture2D overlay = GameUtilities.Content.Load<Texture2D>("Textures/Woodnormal");
+            Material = new DirectionalLightMaterial() { Texture = tex, NoramlTexture= overlay};
 
             base.LoadContent();
         }
