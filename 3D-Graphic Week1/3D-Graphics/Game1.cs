@@ -30,6 +30,11 @@ namespace _3D_Graphics
         int objectsDrawn;
         Random ran = new Random();
 
+        Effect captureDepthAndNormal;
+        RenderTarget2D normalTarget;
+        RenderTarget2D depthTarget;
+
+
         Effect colorEffect;
 
         public Game1()
@@ -97,7 +102,28 @@ namespace _3D_Graphics
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             sfont = Content.Load<SpriteFont>("debug");
- 
+
+
+            captureDepthAndNormal = Content.Load<Effect>
+                ("effects//CaptureDeptAndNormal");
+
+            normalTarget = new RenderTarget2D(
+                GraphicsDevice,
+                GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height,
+                false,
+                SurfaceFormat.Color,
+                DepthFormat.Depth24
+                );
+
+            depthTarget = new RenderTarget2D(
+                 GraphicsDevice,
+                GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height,
+                false,
+                SurfaceFormat.Single,
+                DepthFormat.Depth24
+                );
 
             //for (int i = 0; i < 1000; i++)
             //{
@@ -148,9 +174,36 @@ namespace _3D_Graphics
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
 
+
+        void DrawDepthAndNormal(Camera camera)
+        {
+            GraphicsDevice.SetRenderTargets(normalTarget, depthTarget);
+            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            GraphicsDevice.Clear(Color.White);
+
+            foreach (CustomEffectModel go in gameObjects)
+            {
+                go.CacheEffect();
+                go.SetModelEffect(captureDepthAndNormal, true);
+
+                go.IstandardEffect = false;
+
+                go.Draw(camera);
+                go.RestoreEffct();
+
+                go.IstandardEffect = true;
+            }
+
+            GraphicsDevice.SetRenderTarget(null);
+        }
+        
         protected override void Draw(GameTime gameTime)
         {
+
             GraphicsDevice.Clear(Color.PeachPuff);
+
+            DrawDepthAndNormal(mainCamera);
 
             foreach (SimpleModel go in gameObjects)
             {
@@ -166,6 +219,10 @@ namespace _3D_Graphics
            
 
             spriteBatch.Begin();
+
+            spriteBatch.Draw(normalTarget, new Rectangle(10, 10, 400, 200), Color.White);
+            spriteBatch.Draw(depthTarget, new Rectangle(435, 10, 400, 200), Color.White);
+
             spriteBatch.DrawString(sfont, "Objects Drawn:" + gameObjects.Count, new Vector2(10, 10), Color.White);
             spriteBatch.DrawString(sfont, "Occlusion Time Drawn:" + totalTime, new Vector2(10, 40), Color.White);
             spriteBatch.End();

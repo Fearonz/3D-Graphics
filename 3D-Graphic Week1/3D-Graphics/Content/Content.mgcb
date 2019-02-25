@@ -293,3 +293,9 @@
 /processorParam:TextureFormat=Color
 /build:Textures/woodnormal.bmp
 
+#begin effects/CaptureDeptAndNormal.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:effects/CaptureDeptAndNormal.fx
+
